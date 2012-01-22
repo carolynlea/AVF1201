@@ -9,6 +9,8 @@
 	color:#FFFFFF;
 }
 
+
+
 header {
 	height:120px;	
 }
@@ -22,7 +24,9 @@ header {
 }
 
 .ui-bar-a, .ui-bar-a input, .ui-bar-a select, .ui-bar-a textarea, .ui-bar-a button {
-    font-family: Helvetica,Arial,sans-serif;    
+    font-family: Helvetica,Arial,sans-serif;
+    
+    
 }
 
 .ui-bar-a {
@@ -50,7 +54,6 @@ header {
  background: -moz-linear-gradient(#A2A48B, #6F7158) repeat scroll 0 0 #EEEEEE;
  }
  
-
 
 
 

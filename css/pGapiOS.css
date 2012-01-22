@@ -3,7 +3,7 @@
 }
 
 .ui-header .ui-title {
-	font-family: 'Georgia';
+	font-family: 'Lobster Two';
 	font-size:32px;
 	margin: 0.6em  0.6em;
 	color:#FFFFFF;
@@ -29,7 +29,9 @@ header {
 }
 
 .ui-bar-a, .ui-bar-a input, .ui-bar-a select, .ui-bar-a textarea, .ui-bar-a button {
-    font-family: Helvetica,Arial,sans-serif;   
+    font-family: Helvetica,Arial,sans-serif;
+    
+    
 }
 
 .ui-bar-a {

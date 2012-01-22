@@ -5,7 +5,7 @@
         <meta charset="utf-8">
             
             <title>AVF Demo</title>
-            <!--  This is the code I used for Android through Eclipse. -->
+            
             <!--  Mobile viewport optimized: j.mp/bplateviewport -->
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             
@@ -14,13 +14,13 @@
             
             <!-- StyleSheets under here -->
             <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" />
-            <link href="http://fonts.googleapis.com/css?family=Lobster+Two:700" rel="stylesheet" type="text/css">
+            <link href="http://fonts.googleapis.com/css?family=Lobster+Two:700" rel="stylesheet" type="text/css" />
             <link rel="stylesheet" href="css/pGapAndroid.css" />
             
             <!-- JavaScript is normally at the end of the body, except for Modernizr which enables HTML5 elements & feature detects -->
             <script src="js/libs/modernizr.custom.min.js"></script>
             
-            <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+            <script type="text/javascript" charset="utf-8" src="js/phonegap.js"></script>
             <script type="text/javascript" charset="utf-8">
             var watchID = null;
             // Wait for PhoneGap to load
@@ -60,7 +60,7 @@
                     var win = function(position) {         // Grab coordinates object from the Position object passed into success callback.
                         var coords = position.coords;
                         // Call for static google maps data 
-                        var url = "http://maps.google.com/maps/api/staticmap?center=" + coords.latitude + "," + coords.longitude + "&zoom=13&size=320x480&maptype=roadmap&key=AIzaSyDx0-46NjFfk1cpKYGZX_jD2S8AQlcF6Gc&sensor=true";
+                        var url = "http://maps.google.com/maps/api/staticmap?center=" + coords.latitude + "," + coords.longitude + "&zoom=13&size=780x1024&maptype=roadmap&key=AIzaSyDx0-46NjFfk1cpKYGZX_jD2S8AQlcF6Gc&sensor=true";
                         document.getElementById('map').setAttribute('src',url);
                     };
                     var fail = function(e) {
@@ -68,9 +68,9 @@
                     };
                     navigator.geolocation.getCurrentPosition(win, fail);
                 } 
-                </script>
+            </script>
                 
-                 <script type="text/javascript"> 
+            <script type="text/javascript"> 
                 
                 // Beep twice
                 //
@@ -79,8 +79,86 @@
                 }
             </script>
             
+            <script>
+                
+                function onLoad4() {
+                    document.addEventListener("deviceready", onDeviceReady, false)
+                }
+                
+                function onDeviceReady() {
+                    var myDiv = document.getElementById('props');
+                    myDiv.innerHTML = 'Device Name: ' + device.name + '<br />' +
+                    'Device PhoneGap: ' + device.phonegap + '<br />' +
+                    'Device Platform: ' + device.platform + '<br />' +
+                    'Device UUID: ' + device.uuid + '<br />' +
+                    'Device Version: ' + device.version + '<br />';
+                }
+            </script>
             
-            
+                         <script>
+                function checkConnection() {
+                    var networkState = navigator.network.connection.type;
+                    var states = {};
+                    states[Connection.UNKNOWN] = 'Unknown connection';
+                    states[Connection.ETHERNET] = 'Ethernet connection';
+                    states[Connection.WIFI] = 'WiFi connection';
+                    states[Connection.CELL_2G] = 'Cell 2G connection';
+                    states[Connection.CELL_3G] = 'Cell 3G connection';
+                    states[Connection.CELL_4G] = 'Cell 4G connection';
+                    states[Connection.NONE] = 'No network connection';
+                    alert('Connection type: ' + states[networkState]);
+                }
+             
+                </script>   
+                <script>
+                function playAudio(src) {
+                    // Create Media object from src
+                    my_media = new Media(src, onSuccess2, onError2);
+                    // Play audio
+                    my_media.play();
+                    // Update my_media position every second
+                    if (mediaTimer == null) {
+                        mediaTimer = setInterval(function() {
+                                                 // get my_media position
+                                                 my_media.getCurrentPosition(
+                                                                             // success callback
+                                                                             function(position) {
+                                                                             if (position > -1) {
+                                                                             setAudioPosition((position/1000) + " sec");
+                                                                             }
+                                                                             },
+                                                                             // error callback
+                                                                             function(e) {
+                                                                             console.log("Error getting pos=" + e);
+                                                                             setAudioPosition("Error: " + e);
+                                                                             }
+                                                                             );
+                                                 }, 1000);
+                    }
+                }
+                function pauseAudio() {
+                    if (my_media) {
+                        my_media.pause();
+                    }
+                }
+                function stopAudio() {
+                    if (my_media) {
+                        my_media.stop();
+                    }
+                    clearInterval(mediaTimer);
+                    mediaTimer = null;
+                }
+                function onSuccess2() {
+                    console.log("playAudio():Audio Success");
+                }
+                function onError2(error) {
+                    alert('code: ' + error.code + '\n' +
+                          'message: ' + error.message + '\n');
+                }
+                function setAudioPosition(position) {
+                    document.getElementById('audio_position').innerHTML = position;
+                }
+                </script>
     </head>
     <body>
         <section id="page1" data-role="page">
@@ -119,13 +197,13 @@
             <div class="content" data-role="content" data-theme="c">
                 <h2>Apps and Features Demos</h2>
                 <ul data-role="listview">
-                    <li data-role="list-divider">CRUD APPLICATIONS</li>
+                    <li data-role="list-divider" data-dividertheme="a">CRUD APPLICATIONS</li>
                     <li data-theme="c"><a href="https://carolynlea.cloudant.com/dungeonproject/_design/dungeonproject/index.html">Dungeon Tracker</a></li>
                     <li data-theme="c"><a href="#page2" data-transition="pop">New or Updated App</a></li>
-                    <li data-role="list-divider">NATIVE FEATURES</li>
+                    <li data-role="list-divider" data-dividertheme="a">NATIVE FEATURES</li>
                     <li data-theme="c"><a href="#page3" data-transition="slide">Operate on BOTH iOS AND Android</a></li>
                     <li data-theme="c"><a href="#page6" data-transition="slide">Operate on EITHER iOS OR Android</a></li>
-                    <li data-role="list-divider">VIDEOS AND LINKS</li>
+                    <li data-role="list-divider" data-dividertheme="a">VIDEOS AND LINKS</li>
                     <li data-theme="c"><a href="#videos" data-transition="slide">Reflection and Demo Videos</a></li>
                 </ul>
             </div>
@@ -149,10 +227,13 @@
                 <a href="#page2" data-direction="reverse">Back to Demos</a>
                 <h1>Native Features for Both</h1>
                 <ul data-role="listview" data-theme="c">
-                    <li data-role="list-divider"></li>
+                    <li data-role="list-divider" data-dividertheme="a"></li>
                     <li><a href="#feature1" data-transition="pop" data-rel="dialog">Accelerometer</a></li>
-                    <li><a href="#feature2" data-transition="pop">Geolocation</a></li>
+                    <li><a href="#feature2" data-transition="pop" data-rel="dialog">Geolocation</a></li>
                     <li><a href="#feature3" data-transition="pop" data-rel="dialog">Notifications</a></li>
+                    <li><a href="#feature4" data-transition="pop" data-rel="dialog">Locating Device Properties</a></li>
+                    <li><a href="#feature5" data-transition="pop" data-rel="dialog">Detecting Network Type</a></li>
+                    <li><a href="#feature6" data-transition="pop" data-rel="dialog">Streaming Media</a></li>
                 </ul>
             </div>
             
@@ -174,7 +255,7 @@
             <div class="content" data-role="content" data-theme="c">
                 <h1>Research Articles</h1>
                 <ul data-role="listview">
-                    <li data-role="list-divider"></li>
+                    <li data-role="list-divider" data-dividertheme="a"></li>
                     <li><a href="#week1" data-transition="slide">Week 1 Discussion: Industry Reasearch and Project Intent</a></li>
                     <li><a href="#week2" data-transition="slide">Week 2 Discussion: Accessibility</a></li>
                     <li><a href="#week3" data-transition="slide">Week 3 Discussion Article</a></li>
@@ -228,9 +309,10 @@
                 <a href="#page2" data-direction="reverse">Back to Demos</a>
                 <h1>Native Features for Either</h1>
                 <ul data-role="listview" data-theme="c">
-                    <li data-role="list-divider"></li>
-                    <li><a href="#feature4" data-transition="pop" data-rel="dialog">feature a</a></li>
-                    <li><a href="#feature5" data-transition="pop" data-rel="dialog">feature b</a></li>
+                    <li data-role="list-divider" data-dividertheme="a"></li>
+                    <li>Nothing here yet.</li>
+                    
+                    
                 </ul>
             </div>
             
@@ -253,20 +335,20 @@
                 <article>
                     <h3>Week 1 Discussion: Industry Reasearch and Project Intent</h3>
                 <h4>What types of native features (on Android and iOS devices) would you be able to implement with the use of HTML/CSS/JS only? (just a hint - iOS can be the tricky one)</h4>
-                    <p>Javascript often uses a “bridge” such as PhoneGap to access things like the accelerometer, camera, compass, contacts, geolocation, media, notifications and storage.  HTML5 contains audio and video elements. CSS can be used to make media queries and play with transitions.
+                    <p>Javascript often uses a "bridge" such as PhoneGap to access things like the accelerometer, camera, compass, contacts, geolocation, media, notifications and storage.  HTML5 contains audio and video elements. CSS can be used to make media queries and play with transitions.
                     </p>
                 <h4>For your CRUD app revision, which of these do you think you will implement?</h4>
-                    <p>I’d love to get local storage completely working in my CRUD App.  It is only partially working at this time.  I think it would be very cool to utilize the geolocation in such a way that users would be able to identify other users nearby and compare notes with them.  Of course, they can compare notes with users who are far away as well and it would be interesting to see where people are playing the game worldwide.
+                    <p>I'd love to get local storage completely working in my CRUD App.  It is only partially working at this time.  I think it would be very cool to utilize the geolocation in such a way that users would be able to identify other users nearby and compare notes with them.  Of course, they can compare notes with users who are far away as well and it would be interesting to see where people are playing the game worldwide.
                     </p>
-                <h4>Briefly describe some past 'lessons learned' regarding workflow as it relates to research, design, development, etc.</h4>
-                    <p>I found that it is very important to keep everything organized in appropriate folders.  If I’m going to make large changes in my code, I create a back-up copy of the original in case I spin off on a tangent that doesn’t go anywhere.  As far as research, everything is still hit and miss with me.  Sometimes I can find tons of information and other times I’m at a loss as to what to look for.  Design is sometimes even more difficult than implementation.  I often find that I have a hard time choosing colors that I’m happy with and deciding on the flow of the UI is sometimes challenging as well.  It takes test after test to find what it is that gives the best user experience.
+                <h4>Briefly describe some past \'lessons learned\' regarding workflow as it relates to research, design, development, etc.</h4>
+                    <p>I found that it is very important to keep everything organized in appropriate folders.  If I'm going to make large changes in my code, I create a back-up copy of the original in case I spin off on a tangent that doesn't go anywhere.  As far as research, everything is still hit and miss with me.  Sometimes I can find tons of information and other times I'm at a loss as to what to look for.  Design is sometimes even more difficult than implementation.  I often find that I have a hard time choosing colors that I'm happy with and deciding on the flow of the UI is sometimes challenging as well.  It takes test after test to find what it is that gives the best user experience.
                     </p>
                 <h4>Please describe any design intentions you may have for the AVF Demo app and the revised/new version of your CRUD app.</h4>
                     <p>I would like my Demo App to be similar in color scheme to my CRUD app.  I may not like it when I actually implement it, but that will be my first design choice.  I think that I will also eventually veer away from using jQuery mobile as I find it to be generic looking.  I am hoping to create something that is cleaner,  and leaner but just as functional as jQuery mobile.  So it is very likely that the whole look and feel of the app will evolve into something that I feel personally more pleasing.  Perhaps bits of jQuery will remain.  It will depend on what I can come up with.
                     </p>
                     <h4>If not covered above, please also describe any functionality intentions you may have for both the AVF Demo app and the revised/new version of your CRUD app
                     </h4>
-                        <p>I know that I need to find a way to navigate from my CRUD app on cloudant back to my design app on iOS devices that don’t have an available back button.
+                        <p>I know that I need to find a way to navigate from my CRUD app on cloudant back to my design app on iOS devices that don't have an available back button.
                     </p>
 				<a href="#page4" data-direction="reverse">Back to Research</a>
                 </article>
@@ -295,10 +377,10 @@
                         <p>Using semantic markup is probably the most efficient way to make my app more accessible.  I already use div, section, img, and basics like that.  I could add other tags to render video such as video, source, track and call upon javascript to help users navigate the contents.
                         </p>
                     <h4>Visit a video service on the web (like YouTube) and search for "Screen Reader Demo" - what are some of the common frustrations that you see among the examples that are given - how could you fix them?</h4>
-                        <p>There are many sites that just aren’t optimized to be utilized by screenreaders.  Users get frustrated by not being able to navigate through the page and the service becomes totally useless for the impaired consumer.  Being aware of this demographic and the best practices in optimization is the best way to fix these problems.   With this being my first exposure to accessibility (for it has never entered my train of thought that blind people would use the internet – a bit of naiveté, or perhaps insensitivity on my part), I would definitely feel compelled to look into what I can do to create functionality for everyone who would use my applications.
+                        <p>There are many sites that just aren't optimized to be utilized by screenreaders.  Users get frustrated by not being able to navigate through the page and the service becomes totally useless for the impaired consumer.  Being aware of this demographic and the best practices in optimization is the best way to fix these problems.   With this being my first exposure to accessibility (for it has never entered my train of thought that blind people would use the internet - a bit of naivete, or perhaps insensitivity on my part), I would definitely feel compelled to look into what I can do to create functionality for everyone who would use my applications.
                     </p>
                     <h4>Devices: Please list two devices (and some of their features) that are made specifically to support Accessibility.</h4>
-                        <p>The iPad has received rave reviews for accessibility right out of the box with only a small learning curve.  The iPad’s features include voice over, gestures, text navigation.  The iPhone and iPod touch also features the same sort of accessibility but the iPad’s larger structure adds more functionality for the user.
+                        <p>The iPad has received rave reviews for accessibility right out of the box with only a small learning curve.  The iPad's features include voice over, gestures, text navigation.  The iPhone and iPod touch also features the same sort of accessibility but the iPad's larger structure adds more functionality for the user.
                         </p>
                         <p>Although not a device, Android 2.0 and higher offer accessibility features such as Text To Speech (in English, French, Italian, Spanish, and German), improved keyboard, Project Eyes-Free that has accessibility tools like TalkBack, APIs to create things like screenreaders, and haptic feedback which uses the sense of touch and employing forces, vibrations, and/or motions upon the user.  All stuff to keep in mind while designing apps for Android. 
                         </p>
@@ -343,7 +425,7 @@
         
         <section id="feature1" data-role="page">
             <header data-role="header">
-                <h6>As Done By Carolyn</h6>
+                <h1>As Done By Carolyn</h1>
             </header>
             <div class="content" data-role="content" data-direction="reverse">
                 <h3>Accelerometer</h3>
@@ -356,27 +438,17 @@
         <section id="feature2" data-role="page" data-direction="reverse">
             <header data-role="header">
                 <h1>As Done By Carolyn</h1>
-                <nav data-role="navbar">
-                    <ul>
-                        <a href="#page1" data-transition="pop" data-theme="e">Home</a>
-                        <a href="#page2" data-transition="pop" data-theme="e">Demos</a>
-                        <a href="#page4" data-transition="pop" data-theme="e">Research</a>
-                        <a href="#page5" data-transition="pop" data-theme="e">About</a>
-                    </ul>
-                </nav>
             </header>
             <div class="content" data-role="content">
-            <a href="#page3">Back</a>
                 <h3>Geolocation</h3>
 				<script>run();</script>
         		<img id="map" />
             </div>
-            <footer data-role="footer" data-position="fixed"><center><p>Carolyn Lea AVF1201</p></center></footer>
         </section>
         
         <section id="feature3" data-role="page" data-direction="reverse">
             <header data-role="header">
-                <h6>As Done By Carolyn</h6>
+                <h1>As Done By Carolyn</h1>
             </header>
             <div class="content" data-role="content">
                 <h3>Notifications</h3>
@@ -389,20 +461,33 @@
                 <h1>As Done By Carolyn</h1>
             </header>
             <div class="content" data-role="content">
-                <h3>Feature a</h3>
-				
+                <h3>Locating Device Properties</h3>
+                <script>onLoad4();</script>
+				<p id="props">Loading device properties...</p>
             </div>
         </section>
-        
-        <section id="feature5" data-role="page" data-direction="reverse">
+                <section id="feature5" data-role="page" data-direction="reverse">
             <header data-role="header">
                 <h1>As Done By Carolyn</h1>
             </header>
             <div class="content" data-role="content">
-                <h3>Feature b</h3>
-				
+                <h3>Detecting Network Type</h3>  
+                <button onclick="checkConnection();">Detect Network</button><br />
             </div>
         </section>
+        
+                <section id="feature6" data-role="page" data-direction="reverse">
+            <header data-role="header">
+                <h1>As Done By Carolyn</h1>
+            </header>
+            <div class="content" data-role="content">
+                <h3>Streaming Media</h3>  
+                <button onclick="playAudio('http://ajldevelopment.com/004.mp3');">Play Audio</button>
+                <p>(Audio takes a few moments to load.)</p>
+                <button onclick="stopAudio();">Stop Audio</button><br />
+            </div>
+        </section>
+
         
         <section id="videos" data-role="page">
             <header data-role="header">
@@ -420,7 +505,7 @@
                 <a href="#page2" data-direction="reverse">Back to Demos</a>
                 <h1>Reflection and Demo Videos</h1>
                 <ul data-role="listview" data-theme="c">
-                    <li data-role="list-divider"></li>
+                    <li data-role="list-divider" data-dividertheme="a"></li>
                     <li><a href="#video1" data-transition="pop">Week Two Reflection and Demo</a></li>
                     <li><a href="#video2" data-transition="pop">Week Three Reflection and Demo</a></li>
                     <li><a href="#video3" data-transition="pop">Week Four Reflection and Demo</a></li>
@@ -444,14 +529,16 @@
                 </nav>
             </header>
             <div class="content" data-role="content">
-		    	<h3>Week Two Reflection and Demo</h3>
-		        <video onclick="this.play();" controls width="320" height="240">
-		        	<source src="videos/mr4.mp4" />
-		            <source src="videos/mr4ipad.mp4" type='video/mp4;' />
-		            <source src="videos/mr4.webm" type='video/webm;' />
-		            <source src="videos/mr4.theora.ogv" type='video/ogg;' />
-		        </video>
-		    </div>
+            	<a href="#videos" data-direction="reverse">Back to Videos</a>
+                <h3>Week Two Reflection and Demo</h3>
+                <video width="640" height="480" controls>
+                    <source src="videos/mr4ipad.mp4" type='video/mp4;'>
+                    <source src="videos/mr4.mp4" type='video/mp4;'>
+                    <source src="videos/mr4.webm" type='video/webm;'>
+                    <source src="videos/mr4.theora.ogv" type='video/ogg;'>
+                </video>
+				
+            </div>
             <footer data-role="footer" data-position="fixed"><center><p>Carolyn Lea AVF1201</p></center></footer>
         </section>
         
@@ -468,6 +555,7 @@
                 </nav>
             </header>
             <div class="content" data-role="content">
+            	<a href="#videos" data-direction="reverse">Back to Videos</a>
                 <h3>Week Three Reflection and Demo</h3>
 				
             </div>
@@ -487,6 +575,7 @@
                 </nav>
             </header>
             <div class="content" data-role="content">
+            	<a href="#videos" data-direction="reverse">Back to Videos</a>
                 <h3>Week Four Reflection and Demo</h3>
 				
             </div>
