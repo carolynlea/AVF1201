@@ -1,231 +1,70 @@
 <!doctype html>  
 <html lang="en">
     <head>
-        
         <meta charset="utf-8">
             
             <title>AVF Demo</title>
-            
-            <!--  Mobile viewport optimized: j.mp/bplateviewport -->
-            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-            
-            <!-- Mobile IE needs ClearType for smoothing fonts -->
-            <meta http-equiv="cleartype" content="on" />
-            
-            <!-- StyleSheets under here -->
-            <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" />
-            <link href="http://fonts.googleapis.com/css?family=Lobster+Two:700" rel="stylesheet" type="text/css" />
-            <link rel="stylesheet" href="css/style.css" />
-            
-            <!-- JavaScript is normally at the end of the body, except for Modernizr which enables HTML5 elements & feature detects -->
-            <script src="js/libs/modernizr.custom.min.js"></script>
-            
-            <script type="text/javascript" charset="utf-8" src="phonegap-1.3.0.js"></script>
-            <script type="text/javascript" charset="utf-8">
-                var watchID = null;
-                // Wait for PhoneGap to load
-                document.addEventListener('deviceready', onDeviceReady, false);
-                // PhoneGap is ready, start watching
-                function onDeviceReady() {
-                    startWatch();
-                }
-                // Start watching the acceleration
-                function startWatch() {
-                    // Update acceleration every 3 seconds
-                    var options = { frequency: 3000 };
-                    watchID = navigator.accelerometer.watchAcceleration(onSuccess, onError,
-                                                                        options);
-                }
-                // Stop watching the acceleration
-                function stopWatch() {
-                    if (watchID) {
-                        navigator.accelerometer.clearWatch(watchID);
-                        watchID = null;
-                    }
-                }
-                // onSuccess: Get a snapshot of the current acceleration
-                function onSuccess(acceleration) {
-                    var element = document.getElementById('accelerometer');
-                    element.innerHTML = 'Acceleration X: ' + acceleration.x + '<br />' + 'Acceleration Y: ' + acceleration.y + '<br />' + 'Acceleration Z: ' + acceleration.z + '<br />' + 'Timestamp: ' + acceleration.timestamp + '<br />';
-                }
-                // onError: Failed to get the acceleration
-                //
-                function onError() {
-                    alert('oooops!');
-                }
-                </script>
-            
-            <script type="text/javascript">              
-                function run() {
-                    var win = function(position) {         // Grab coordinates object from the Position object passed into success callback.
-                        var coords = position.coords;
-                        // Call for static google maps data 
-                        var url = "http://maps.google.com/maps/api/staticmap?center=" + coords.latitude + "," + coords.longitude + "&zoom=13&size=780x1024&maptype=roadmap&key=AIzaSyDx0-46NjFfk1cpKYGZX_jD2S8AQlcF6Gc&sensor=true";
-                        document.getElementById('map').setAttribute('src',url);
-                    };
-                    var fail = function(e) {
-                        alert('Can\'t retrieve position.\nError: ' + e);
-                    };
-                    navigator.geolocation.getCurrentPosition(win, fail);
-                } 
-                </script>
-            
-            <script type="text/javascript"> 
-                
-                // Beep twice, iOS ignores the count
-                //
-                function playBeep() {
-                    navigator.notification.beep(2);
-                }
-                </script>
-            
-            <script>
-                
-                function onLoad4() {
-                    document.addEventListener("deviceready", onDeviceReady, false)
-                }
-                
-                function onDeviceReady() {
-                    var myDiv = document.getElementById('props');
-                    myDiv.innerHTML = 'Device Name: ' + device.name + '<br />' +
-                    'Device PhoneGap: ' + device.phonegap + '<br />' +
-                    'Device Platform: ' + device.platform + '<br />' +
-                    'Device UUID: ' + device.uuid + '<br />' +
-                    'Device Version: ' + device.version + '<br />';
-                }
-                </script>
-            
-            <script>
-                function checkConnection() {
-                    var networkState = navigator.network.connection.type;
-                    var states = {};
-                    states[Connection.UNKNOWN] = 'Unknown connection';
-                    states[Connection.ETHERNET] = 'Ethernet connection';
-                    states[Connection.WIFI] = 'WiFi connection';
-                    states[Connection.CELL_2G] = 'Cell 2G connection';
-                    states[Connection.CELL_3G] = 'Cell 3G connection';
-                    states[Connection.CELL_4G] = 'Cell 4G connection';
-                    states[Connection.NONE] = 'No network connection';
-                    alert('Connection type: ' + states[networkState]);
-                }
-             
-                </script>
-            
-            <script>
-                function playAudio(src) {
-                    // Create Media object from src
-                    my_media = new Media(src, onSuccess2, onError2);
-                    // Play audio
-                    my_media.play();
-                    // Update my_media position every second
-                    if (mediaTimer == null) {
-                        mediaTimer = setInterval(function() {
-                            // get my_media position
-                            my_media.getCurrentPosition(
-                                // success callback
-                                function(position) {
-                                if (position > -1) {
-                                setAudioPosition((position/1000) + " sec");
-                                }
-                                },
-                                // error callback
-                                function(e) {
-                                    console.log("Error getting pos=" + e);
-                                    setAudioPosition("Error: " + e);
-                                    }
-                                    );
-                                                 }, 1000);
-                    }
-                }
-                function pauseAudio() {
-                    if (my_media) {
-                        my_media.pause();
-                    }
-                }
-                function stopAudio() {
-                    if (my_media) {
-                        my_media.stop();
-                    }
-                    clearInterval(mediaTimer);
-                    mediaTimer = null;
-                }
-                function onSuccess2() {
-                    console.log("playAudio():Audio Success");
-                }
-                function onError2(error) {
-                    alert('code: ' + error.code + '\n' +
-                          'message: ' + error.message + '\n');
-                }
-                function setAudioPosition(position) {
-                    document.getElementById('audio_position').innerHTML = position;
-                }
-                </script>
-            
-            
-            </head>
+            <!-- Custom JavaScript functions to remove header/navigation/footer redundancies -->
+			<script src="js/customfunctions.js"></script>
+			
+			<!-- JavaScript to include all header elements on every page, sans repetition -->
+			<script type="text/javascript">writeHead();</script>
+	</head>
+    
     <body>
+
+<!-- START of Home Page -->        
         <section id="page1" data-role="page">
-            <header data-role="header">
-                <h1>As Done by Carolyn</h1>
-                <nav data-role="navbar">
-                    <ul>
-                        <a href="#page1" data-transition="pop" data-theme="e">Home</a>
-                        <a href="#page2" data-transition="pop" data-theme="e">Demos</a>
-                        <a href="#page4" data-transition="pop" data-theme="e">Research</a>
-                        <a href="#page5" data-transition="pop" data-theme="e">About</a>
-                    </ul>
-                </nav>
-                
-            </header>
+            <!-- JavaScript to include section header (including navigation) where needed, sans repetition -->
+            <script type="text/javascript">writeSectionHeader();</script>
 			<div class="content" data-role="content" data-theme="e">
                 <background><img src="images/cmpsilho.gif" /></background>
-                
-			</div>
-            
-            <footer data-role="footer" data-position="fixed"><center><p>Carolyn Lea AVF1201</p></center></footer>
+            </div>
+            <!-- JavaScript to include section footer where needed, sans repetition and update/edit once -->
+            <script type="text/javascript">writeSectionFooter();</script>
         </section>
-        
+<!-- END of Home Page -->         
+
+<!-- START of Apps and Features Page -->          
         <section id="page2" data-role="page">
-            <header data-role="header">
-                <h1>As Done By Carolyn</h1>
-                <nav data-role="navbar">
-                    <ul>
-                        <a href="#page1" data-transition="pop" data-theme="e">Home</a>
-                        <a href="#page2" data-transition="pop" data-theme="e">Demos</a>
-                        <a href="#page4" data-transition="pop" data-theme="e">Research</a>
-                        <a href="#page5" data-transition="pop" data-theme="e">About</a>
-                    </ul>
-                </nav>
-            </header>
+            <!-- JavaScript to include section header (including navigation) where needed, sans repetition -->
+            <script type="text/javascript">writeSectionHeader();</script>
             <div class="content" data-role="content" data-theme="c">
                 <h2>Apps and Features Demos</h2>
                 <ul data-role="listview">
                     <li data-role="list-divider">CRUD APPLICATIONS</li>
-                    <li data-theme="c"><a href="https://carolynlea.cloudant.com/dungeonproject/_design/dungeonproject/index.html">Dungeon Tracker</a></li>
-                    <li data-theme="c"><a href="#page2" data-transition="pop">New or Updated App</a></li>
+                    <li data-theme="c"><a href="#testit" data-transition="slide" rel="external">Dungeon Tracker</a></li>
                     <li data-role="list-divider">NATIVE FEATURES</li>
                     <li data-theme="c"><a href="#page3" data-transition="slide">Operate on BOTH iOS AND Android</a></li>
-                    <li data-theme="c"><a href="#page6" data-transition="slide">Operate on EITHER iOS OR Android</a></li>
                     <li data-role="list-divider">VIDEOS AND LINKS</li>
                     <li data-theme="c"><a href="#videos" data-transition="slide">Reflection and Demo Videos</a></li>
                 </ul>
             </div>
-            
-            <footer data-role="footer" data-position="fixed"><center><p>Carolyn Lea AVF1201</p></center></footer>
+            <!-- JavaScript to include section footer where needed, sans repetition and update/edit once -->
+            <script type="text/javascript">writeSectionFooter();</script>
         </section>
+<!-- END of Apps and Features Page -->
+       
+
+<!-- START of CRUD Apps Page -->        
+        <section id="testit" data-role="page">
+            <!-- JavaScript to include section header (including navigation) where needed, sans repetition -->
+            <script type="text/javascript">writeSectionHeader();</script>
+            <div class="content" data-role="content">
+                <iframe src="https://carolynlea.cloudant.com/dungeonproject/_design/dungeonproject/index.html" frameborder="0" width="100%" height="100%">
+                </iframe> 
+            </div>
+            <!-- JavaScript to include section footer where needed, sans repetition and update/edit once -->
+            <script type="text/javascript">writeSectionFooter();</script>
+        </section>
+<!-- END of CRUD Apps Page -->             
+            
+            
         
+<!-- START of Native Features Page -->        
         <section id="page3" data-role="page">
-            <header data-role="header">
-                <h1>As Done By Carolyn</h1>
-                <nav data-role="navbar">
-                    <ul>
-                        <a href="#page1" data-transition="pop" data-theme="e">Home</a>
-                        <a href="#page2" data-transition="pop" data-theme="e">Demos</a>
-                        <a href="#page4" data-transition="pop" data-theme="e">Research</a>
-                        <a href="#page5" data-transition="pop" data-theme="e">About</a>
-                    </ul>
-                </nav>
-            </header>
+            <!-- JavaScript to include section header (including navigation) where needed, sans repetition -->
+            <script type="text/javascript">writeSectionHeader();</script>
             <div class="content" data-role="content">
                 <a href="#page2" data-direction="reverse">Back to Demos</a>
                 <h1>Native Features for Both</h1>
@@ -239,101 +78,158 @@
                     <li><a href="#feature6" data-transition="pop" data-rel="dialog">Streaming Media</a></li>
                 </ul>
             </div>
-            
-            <footer data-role="footer" data-position="fixed"><center><p>Carolyn Lea AVF1201</p></center></footer>
+            <!-- JavaScript to include section footer where needed, sans repetition and update/edit once -->
+            <script type="text/javascript">writeSectionFooter();</script>
+        </section>
+<!-- END of Native Features Page --> 
+   
+        <!-- START of Native Features -->         
+        <section id="feature1" data-role="page">
+            <header data-role="header">
+                <h3>Accelerometer</h3>
+            </header>
+            <div class="content" data-role="content">
+                <div id="accelerometer">Waiting for accelerometer...</div>
+				<button onclick="stopWatch();">Stop Watching</button><br />
+				<button onclick="startWatch();">Start Watching Again</button>
+            </div>
         </section>
         
-        <section id="page4" data-role="page">
+        <section id="feature2" data-role="page">
             <header data-role="header">
-                <h1>As Done By Carolyn</h1>
-                <nav data-role="navbar">
-                    <ul>
-                        <a href="#page1" data-transition="pop" data-theme="e">Home</a>
-                        <a href="#page2" data-transition="pop" data-theme="e">Demos</a>
-                        <a href="#page4" data-transition="pop" data-theme="e">Research</a>
-                        <a href="#page5" data-transition="pop" data-theme="e">About</a>
-                    </ul>
-                </nav>
+                <h3>Geolocation</h3>
             </header>
+            <div class="content" data-role="content">
+                <script>run();</script>
+        		<img id="map" />
+            </div>
+        </section>
+        
+        <section id="feature3" data-role="page">
+            <header data-role="header">
+                <h3>Audio Notification</h3>
+            </header>
+            <div class="content" data-role="content">
+                <p><a href="#" onclick="playBeep(); return false;">Yank the balloon.</a></p>
+            </div>
+        </section>
+        
+        <section id="feature4" data-role="page">
+            <header data-role="header">
+                <h3>Device Properties</h3>
+            </header>
+            <div class="content" data-role="content">
+                <script>onLoad4();</script>
+				<p id="props">Loading device properties...</p>
+            </div>
+        </section>
+        
+        <section id="feature5" data-role="page">
+            <header data-role="header">
+                <h3>Detecting Network</h3>
+            </header>
+            <div class="content" data-role="content">
+                <button onclick="checkConnection();">Detect Network</button><br />
+            </div>
+        </section>
+        
+        <section id="feature6" data-role="page">
+            <header data-role="header">
+                <h3>Streaming Media</h3> 
+            </header>
+            <div class="content" data-role="content">
+                <button onclick="playAudio('http://ajldevelopment.com/004.mp3');">Play Audio</button><br />
+                <button onclick="stopAudio();">Stop Audio</button><br />
+            </div>
+        </section>
+        <!-- END of Native Features -->        
+        
+<!-- START of Videos & Links Page -->         
+        <section id="videos" data-role="page">
+            <!-- JavaScript to include section header (including navigation) where needed, sans repetition -->
+            <script type="text/javascript">writeSectionHeader();</script>
+            <div class="content" data-role="content">
+                <a href="#page2" data-direction="reverse">Back to Demos</a>
+                <h1>Reflection and Demo Videos</h1>
+                <ul data-role="listview" data-theme="c">
+                    <li data-role="list-divider"></li>
+                    <li><a href="#video1" data-transition="slide">Week Two Reflection and Demo</a></li>
+                    <li><a href="#video2" data-transition="slide">Week Three Reflection and Demo</a></li>
+                    <li><a href="#video3" data-transition="slide">Week Four Reflection and Demo</a></li>
+                </ul>
+            </div>
+            <!-- JavaScript to include section footer where needed, sans repetition and update/edit once -->
+            <script type="text/javascript">writeSectionFooter();</script>
+        </section>
+<!-- END of Videos & Links Page --> 
+   
+        <!-- START of Videos -->         
+        <section id="video1" data-role="page" data-direction="reverse">
+            <!-- JavaScript to include section header (including navigation) where needed, sans repetition -->
+            <script type="text/javascript">writeSectionHeader();</script>
+            <div class="content" data-role="content">
+                <a href="#videos" data-direction="reverse">Back to Videos</a>
+                <h3>Week Two Reflection and Demo</h3>
+                <video width="640" height="480" controls>
+                    <source src="http://ajldevelopment.com/videos/mr4ipad.mp4" type='video/mp4'>
+                    <source src="http://ajldevelopment.com/videos/mr4.mp4" type='video/mp4;'>
+                    <source src="http://ajldevelopment.com/videos/mr4.webm" type='video/webm;'>
+                    <source src="http://ajldevelopment.com/videos/mr4.theora.ogv" type='video/ogg;'>
+                </video>
+			</div>
+            <!-- JavaScript to include section footer where needed, sans repetition and update/edit once -->
+            <script type="text/javascript">writeSectionFooter();</script>
+        </section>
+        
+        <section id="video2" data-role="page" data-direction="reverse">
+            <!-- JavaScript to include section header (including navigation) where needed, sans repetition -->
+            <script type="text/javascript">writeSectionHeader();</script>
+            <div class="content" data-role="content">
+                <a href="#videos" data-direction="reverse">Back to Videos</a>
+                <h3>Week Three Reflection and Demo</h3>
+                <video width="640" height="480" controls>
+                    <source src="http://ajldevelopment.com/videos/mr2ipad.mp4" type='video/mp4;'>
+                    <source src="http://ajldevelopment.com/videos/mr2.mp4" type='video/mp4;'>
+                </video>
+            </div>
+            <!-- JavaScript to include section footer where needed, sans repetition and update/edit once -->
+            <script type="text/javascript">writeSectionFooter();</script>
+        </section>
+        
+        <section id="video3" data-role="page" data-direction="reverse">
+            <!-- JavaScript to include section header where (including navigation) needed, sans repetition -->
+            <script type="text/javascript">writeSectionHeader();</script>
+            <div class="content" data-role="content">
+                <a href="#videos" data-direction="reverse">Back to Videos</a>
+                <h3>Week Four Reflection and Demo</h3>
+			</div>
+            <!-- JavaScript to include section footer where needed, sans repetition and update/edit once -->
+            <script type="text/javascript">writeSectionFooter();</script>
+        </section>
+        <!-- END of Videos -->           
+
+<!-- START of Research Articles Page -->         
+        <section id="page4" data-role="page">
+            <!-- JavaScript to include section header (including navigation) where needed, sans repetition -->
+            <script type="text/javascript">writeSectionHeader();</script>
             <div class="content" data-role="content" data-theme="c">
                 <h1>Research Articles</h1>
                 <ul data-role="listview">
                     <li data-role="list-divider"></li>
                     <li><a href="#week1" data-transition="slide">Week 1 Discussion: Industry Reasearch and Project Intent</a></li>
                     <li><a href="#week2" data-transition="slide">Week 2 Discussion: Accessibility</a></li>
-                    <li><a href="#week3" data-transition="slide">Week 3 Discussion Article</a></li>
+                    <li><a href="#week3" data-transition="slide">Week 3 Discussion Article: Trends</a></li>
                 </ul>
             </div>
-            
-            <footer data-role="footer" data-position="fixed"><center><p>Carolyn Lea AVF1201</p></center></footer>
+            <!-- JavaScript to include section footer where needed, sans repetition and update/edit once -->
+            <script type="text/javascript">writeSectionFooter();</script>
         </section>
+<!-- END of Research Articles Page -->     
         
-        <section id="page5" data-role="page">
-            <header data-role="header">
-                <h1>As Done By Carolyn</h1>
-                <nav data-role="navbar">
-                    <ul>
-                        <a href="#page1" data-transition="pop" data-theme="e">Home</a>
-                        <a href="#page2" data-transition="pop" data-theme="e">Demos</a>
-                        <a href="#page4" data-transition="pop" data-theme="e">Research</a>
-                        <a href="#page5" data-transition="pop" data-theme="e">About</a>
-                    </ul>
-                </nav>
-            </header>
-            <div class="content" data-role="content">
-                <h1>About</h1>
-                <img src="images/me2.jpg" />
-                <p>Carolyn Lea</p>
-                <p>AVF1201</p>
-                <h3>Welcome to my collection!</h3>
-                <p>This is a round-up of all my class assignments for AVF1201.  You will be able to view my
-				current CRUD apps, see demonstrations of iOS and Android native features that I am able
-				to implement, and have access to my most recent research in the field of mobile
-				technology.  Thanks for visiting!</p>
-                
-            </div>
-            
-            <footer data-role="footer" data-position="fixed"><center><p>Carolyn Lea AVF1201</p></center></footer>
-        </section>
-        
-        <section id="page6" data-role="page">
-            <header data-role="header">
-                <h1>As Done By Carolyn</h1>
-                <nav data-role="navbar">
-                    <ul>
-                        <a href="#page1" data-transition="pop" data-theme="e">Home</a>
-                        <a href="#page2" data-transition="pop" data-theme="e">Demos</a>
-                        <a href="#page4" data-transition="pop" data-theme="e">Research</a>
-                        <a href="#page5" data-transition="pop" data-theme="e">About</a>
-                    </ul>
-                </nav>
-            </header>
-            <div class="content" data-role="content">
-                <a href="#page2" data-direction="reverse">Back to Demos</a>
-                <h1>Native Features for Either</h1>
-                <ul data-role="listview" data-theme="c">
-                    <li data-role="list-divider"></li>
-                    <li>Nothing here yet.</li>
-                    
-                    
-                </ul>
-            </div>
-            
-            <footer data-role="footer" data-position="fixed"><center><p>Carolyn Lea AVF1201</p></center></footer>
-        </section>
-        
+        <!-- START of Research Articles -->
         <section id="week1" data-role="page">
-            <header data-role="header">
-                <h1>As Done By Carolyn</h1>
-                <nav data-role="navbar">
-                    <ul>
-                        <a href="#page1" data-transition="pop" data-theme="e">Home</a>
-                        <a href="#page2" data-transition="pop" data-theme="e">Demos</a>
-                        <a href="#page4" data-transition="pop" data-theme="e">Research</a>
-                        <a href="#page5" data-transition="pop" data-theme="e">About</a>
-                    </ul>
-                </nav>
-            </header>
+            <!-- JavaScript to include section header (including navigation) where needed, sans repetition -->
+            <script type="text/javascript">writeSectionHeader();</script>
             <div class="content" data-role="content">
                 <article>
                     <h3>Week 1 Discussion: Industry Reasearch and Project Intent</h3>
@@ -356,23 +252,13 @@
                     <a href="#page4" data-direction="reverse">Back to Research</a>
                 </article>
             </div>
-            
-            
-            <footer data-role="footer"><center><p>Carolyn Lea AVF1201</p></center></footer>
+            <!-- JavaScript to include section footer where needed, sans repetition and update/edit once -->
+            <script type="text/javascript">writeSectionFooter();</script>
         </section>
         
         <section id="week2" data-role="page">
-            <header data-role="header">
-                <h1>As Done By Carolyn</h1>
-                <nav data-role="navbar">
-                    <ul>
-                        <a href="#page1" data-transition="pop" data-theme="e">Home</a>
-                        <a href="#page2" data-transition="pop" data-theme="e">Demos</a>
-                        <a href="#page4" data-transition="pop" data-theme="e">Research</a>
-                        <a href="#page5" data-transition="pop" data-theme="e">About</a>
-                    </ul>
-                </nav>
-            </header>
+            <!-- JavaScript to include section header (including navigation) where needed, sans repetition -->
+            <script type="text/javascript">writeSectionHeader();</script>
             <div class="content" data-role="content">
                 <article>
                     <h3>Week 2 Discussion: Accessibility</h3>
@@ -393,207 +279,65 @@
                     <a href="#page4" data-direction="reverse">Back to Research</a>
                 </article>
             </div>
-            
-            
-            <footer data-role="footer"><center><p>Carolyn Lea AVF1201</p></center></footer>
+            <!-- JavaScript to include section footer where needed, sans repetition and update/edit once -->
+            <script type="text/javascript">writeSectionFooter();</script>
         </section>
         
         <section id="week3" data-role="page">
-            <header data-role="header">
-                <h1>As Done By Carolyn</h1>
-                <nav data-role="navbar">
-                    <ul>
-                        <a href="#page1" data-transition="pop" data-theme="e">Home</a>
-                        <a href="#page2" data-transition="pop" data-theme="e">Demos</a>
-                        <a href="#page4" data-transition="pop" data-theme="e">Research</a>
-                        <a href="#page5" data-transition="pop" data-theme="e">About</a>
-                    </ul>
-                </nav>
-            </header>
+            <!-- JavaScript to include section header (including navigation) where needed, sans repetition -->
+            <script type="text/javascript">writeSectionHeader();</script>
             <div class="content" data-role="content">
-                <h3>Week 3 Discussion</h3>
 				<article>
-                    <h3>Week 3 Discussion</h3>
-                    <p>This is where the week 1 discussion article will go.</p>
-                    <p>This is where the week 1 discussion article will go.</p>
-                    <p>This is where the week 1 discussion article will go.</p>
-                    <p>This is where the week 1 discussion article will go.</p>
+                    <h3>Week 3 Discussion: Trends</h3>
+					<h4>What are the 'top selling' app categories in the U.S.?</h4>
+                    <p>My research seems to indicate that games are the top selling category in the U.S.   Game apps are followed by entertainment apps and then social networking apps.</p>
+					<h4>What are the 'top selling' app categories in Japan?</h4>
+                    <p>It seems that the Japanese are interested in the same things as Americans and their top app categories coincide with those of the U.S. – games, entertainment, social networking.</p>
+					<h4>What are the 'top selling' app categories in Great Britain?</h4>
+                    <p>What I found for Great Britain was a toss up depending on where I looked.  Many sites lumped Great Britain with America and so the data shows that games are the highest rated category.  But if you go off of other sites for what’s hot in Great Britain during any given week, there is data to support that map apps for guiding you to places were top selling and sometimes apps that kept you organized were top selling.</p>
+					<h4>Based on your three answers above, what might you infer about each of the markets listed?</h4>
+                    <p>I would have to say that worldwide, people love to be entertained.  They love the escape factor of being able to spend a couple minutes on a game level in between real life tasks.  People also like to keep in touch with those that they know and be able to share things with them throughout the day.  Social networking has changed the way the world interacts.</p>
+					<h4>What percentage of Android users have the latest/greatest OS in the U.S? in Japan? in Great Britain? How might these differences impact development?</h4>
+					<p>Android users account for just over 40% of the Mobile OS market in America, just over 20% in the United Kingdom, and in Japan they account for just under 48%.  Not only that, it seems that Android jumped from 9.6% of the smartphone global market share in 2010 to 36% of smartphone global market share in 2011.  That is a jump to be noticed and to take advantage of while Android is popular (although another source projects that Android users would total over 48% by 2015). I would say that if you were to develop for Android you might want to concentrate your efforts in games or entertainment apps for the U.S. and Japanese markets and do it while it is trending upwards in sales. </p>
+					<h4>What is the average cost and bandwidth limits per user (in general) in each of the three markets? How may this impact development?</h4>
+					<p>I just could not find the appropriate information to answer this question.  I did find out that apps are beginning to get more bandwidth intensive and carriers are trying to figure out ways to regulate how much bandwidth an individual can use.</p>
+					<h4>And, finally, what would be your suggested strategy in project topic and global market choice? Feel free to have a first and second choice.</h4>
+					<p>If you were just to look at the numbers, you’d see that Android is rapidly gaining almost half of the smartphone market.  All other devices are still out there in varying degrees.  What you have to remember is that even if iOS is only capturing 16% of the total market, they are representing 16% of millions of people. This, of course, translates to lots and lots of users.  Also, from what I have heard from people currently in the industry in my neck of the woods, Android users are notoriously “thrifty” as opposed to iOS users who are willing to pay for anything of quality.  So it is conceivable that if you are looking to monetize anything in mobile, you can get better returns in the iOS market.
+
+					All that being said, there is the ease of being able to get your app to market to consider.  The Apple App Store is known to be quite picky while the open source and less stringent policies for the Android market make listing an app much easier than the App Store.
+
+					Choosing who to create apps for would depend on the demographics you are trying to reach and what it is you want to achieve.  Are you trying to make money or is the app something that enhances another product that already makes money?  Game apps are the most downloaded but that doesn’t mean that there isn’t room for every other conceivable type of app that you could produce.  So, while trends are important, niche markets can also be viable as well as producing something that you love.  Chances are that if you are interested in a particular subject or genre, there will be others out there that will share this love with you and are looking for an app just like yours.
+
+					After all that, I guess I would recommend that focus should be placed on creating an app that is easy and intuitive, either useful or fun (or both), and that  can be used almost without thinking.  Whatever you create needs to be high quality and the word will get out.
+					</p>
                     <a href="#page4" data-direction="reverse">Back to Research</a>
                 </article>
             </div>
-            
-            
-            <footer data-role="footer"><center><p>Carolyn Lea AVF1201</p></center></footer>
+            <!-- JavaScript to include section footer where needed, sans repetition and update/edit once -->
+            <script type="text/javascript">writeSectionFooter();</script>
         </section>
+        <!-- END of Research Articles -->
         
-        <section id="feature1" data-role="page">
-            <header data-role="header">
-                <h1>As Done By Carolyn</h1>
-            </header>
+<!-- START of About Page -->         
+        <section id="page5" data-role="page">
+            <!-- JavaScript to include section header where needed, sans repetition -->
+            <script type="text/javascript">writeSectionHeader();</script>
             <div class="content" data-role="content">
-                <h3>Accelerometer</h3>
-				<div id="accelerometer">Waiting for accelerometer...</div>
-				<button onclick="stopWatch();">Stop Watching</button><br />
-				<button onclick="startWatch();">Start Watching Again</button>
+                <h1>About</h1>
+                <img src="images/me2.jpg" />
+                <p>Carolyn Lea</p>
+                <p>AVF1201</p>
+                <h3>Welcome to my collection!</h3>
+                <p>This is a round-up of all my class assignments for AVF1201.  You will be able to view my
+				current CRUD apps, see demonstrations of iOS and Android native features that I am able
+				to implement, and have access to my most recent research in the field of mobile
+				technology.  Thanks for visiting!</p>
             </div>
+            <!-- JavaScript to include section footer where needed, sans repetition and update/edit once -->
+            <script type="text/javascript">writeSectionFooter();</script>
         </section>
-        
-        <section id="feature2" data-role="page">
-            <header data-role="header">
-                <h1>As Done By Carolyn</h1>
-            </header>
-            <div class="content" data-role="content">
-                <h3>Geolocation</h3>
-				<script>run();</script>
-        		<img id="map" />
-            </div>
-        </section>
-        
-        <section id="feature3" data-role="page">
-            <header data-role="header">
-                <h1>As Done By Carolyn</h1>
-            </header>
-            <div class="content" data-role="content">
-                <h3>One Type of Notification</h3>
-				<p><a href="#" onclick="playBeep(); return false;">Yank the balloon.</a></p>
-            </div>
-        </section>
-        
-        <section id="feature4" data-role="page">
-            <header data-role="header">
-                <h1>As Done By Carolyn</h1>
-            </header>
-            <div class="content" data-role="content">
-                <h3>Locating Device Properties</h3>                      
-                <script>onLoad4();</script>
-				<p id="props">Loading device properties...</p>
-            </div>
-        </section>
-        
-        <section id="feature5" data-role="page">
-            <header data-role="header">
-                <h1>As Done By Carolyn</h1>
-            </header>
-            <div class="content" data-role="content">
-                <h3>Detecting Network Type</h3>  
-                <button onclick="checkConnection();">Detect Network</button><br />
-            </div>
-        </section>
-        
-        <section id="feature6" data-role="page">
-            <header data-role="header">
-                <h1>As Done By Carolyn</h1>
-            </header>
-            <div class="content" data-role="content">
-                <h3>Streaming Media</h3>  
-                <button onclick="playAudio('http://ajldevelopment.com/004.mp3');">Play Audio</button><br />
-                <button onclick="stopAudio();">Stop Audio</button><br />
-            </div>
-        </section>
-        
-        
-        
-        <section id="videos" data-role="page">
-            <header data-role="header">
-                <h1>As Done By Carolyn</h1>
-                <nav data-role="navbar">
-                    <ul>
-                        <a href="#page1" data-transition="pop" data-theme="e">Home</a>
-                        <a href="#page2" data-transition="pop" data-theme="e">Demos</a>
-                        <a href="#page4" data-transition="pop" data-theme="e">Research</a>
-                        <a href="#page5" data-transition="pop" data-theme="e">About</a>
-                    </ul>
-                </nav>
-            </header>
-            <div class="content" data-role="content">
-                <a href="#page2" data-direction="reverse">Back to Demos</a>
-                <h1>Reflection and Demo Videos</h1>
-                <ul data-role="listview" data-theme="c">
-                    <li data-role="list-divider"></li>
-                    <li><a href="#video1" data-transition="slide">Week Two Reflection and Demo</a></li>
-                    <li><a href="#video2" data-transition="slide">Week Three Reflection and Demo</a></li>
-                    <li><a href="#video3" data-transition="slide">Week Four Reflection and Demo</a></li>
-                </ul>
-            </div>
-            
-            
-            <footer data-role="footer"><center><p>Carolyn Lea AVF1201</p></center></footer>
-        </section>
-        
-        <section id="video1" data-role="page" data-direction="reverse">
-            <header data-role="header">
-                <h1>As Done By Carolyn</h1>
-                <nav data-role="navbar">
-                    <ul>
-                        <a href="#page1" data-transition="pop" data-theme="e">Home</a>
-                        <a href="#page2" data-transition="pop" data-theme="e">Demos</a>
-                        <a href="#page4" data-transition="pop" data-theme="e">Research</a>
-                        <a href="#page5" data-transition="pop" data-theme="e">About</a>
-                    </ul>
-                </nav>
-            </header>
-            <div class="content" data-role="content">
-                <a href="#videos" data-direction="reverse">Back to Videos</a>
-                <h3>Week Two Reflection and Demo</h3>
-                <video width="640" height="480" controls>
-                    <source src="videos/mr4ipad.mp4" type='video/mp4;'>
-                        <source src="videos/mr4.mp4" type='video/mp4;'>
-                            <source src="videos/mr4.webm" type='video/webm;'>
-                                <source src="videos/mr4.theora.ogv" type='video/ogg;'>
-                                    </video>
-				
-            </div>
-            <footer data-role="footer" data-position="fixed"><center><p>Carolyn Lea AVF1201</p></center></footer>
-        </section>
-        
-        <section id="video2" data-role="page" data-direction="reverse">
-            <header data-role="header">
-                <h1>As Done By Carolyn</h1>
-                <nav data-role="navbar">
-                    <ul>
-                        <a href="#page1" data-transition="pop" data-theme="e">Home</a>
-                        <a href="#page2" data-transition="pop" data-theme="e">Demos</a>
-                        <a href="#page4" data-transition="pop" data-theme="e">Research</a>
-                        <a href="#page5" data-transition="pop" data-theme="e">About</a>
-                    </ul>
-                </nav>
-            </header>
-            <div class="content" data-role="content">
-                <a href="#videos" data-direction="reverse">Back to Videos</a>
-                <h3>Week Three Reflection and Demo</h3>
-                <video width="640" height="480" controls>
-                    <source src="videos/mr2ipad.mp4" type='video/mp4;'>
-                        <source src="videos/mr2.mp4" type='video/mp4;'>
-                            </video>
-            </div>
-            <footer data-role="footer" data-position="fixed"><center><p>Carolyn Lea AVF1201</p></center></footer>
-        </section>
-        
-        <section id="video3" data-role="page" data-direction="reverse">
-            <header data-role="header">
-                <h1>As Done By Carolyn</h1>
-                <nav data-role="navbar">
-                    <ul>
-                        <a href="#page1" data-transition="pop" data-theme="e">Home</a>
-                        <a href="#page2" data-transition="pop" data-theme="e">Demos</a>
-                        <a href="#page4" data-transition="pop" data-theme="e">Research</a>
-                        <a href="#page5" data-transition="pop" data-theme="e">About</a>
-                    </ul>
-                </nav>
-            </header>
-            <div class="content" data-role="content">
-                <a href="#videos" data-direction="reverse">Back to Videos</a>
-                <h3>Week Four Reflection and Demo</h3>
-				
-            </div>
-            <footer data-role="footer" data-position="fixed"><center><p>Carolyn Lea AVF1201</p></center></footer>
-        </section>
-        
-        
-        
-		
-        
-        
+<!-- END of About Page -->        
+
         <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
         <script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
     </body>
